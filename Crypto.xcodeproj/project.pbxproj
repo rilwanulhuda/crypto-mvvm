@@ -31,8 +31,6 @@
 		F92DB25226A939C7000F3E49 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB25026A939C7000F3E49 /* HomeViewController.swift */; };
 		F92DB25326A939C7000F3E49 /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F92DB25126A939C7000F3E49 /* HomeViewController.xib */; };
 		F92DB25826A93A54000F3E49 /* HomeFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB25426A93A53000F3E49 /* HomeFactory.swift */; };
-		F92DB25926A93A54000F3E49 /* HomeInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB25526A93A53000F3E49 /* HomeInteractor.swift */; };
-		F92DB25A26A93A54000F3E49 /* HomePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB25626A93A54000F3E49 /* HomePresenter.swift */; };
 		F92DB25B26A93A54000F3E49 /* HomeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB25726A93A54000F3E49 /* HomeRouter.swift */; };
 		F92DB25E26A93AB9000F3E49 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB25C26A93AB9000F3E49 /* AppRouter.swift */; };
 		F92DB25F26A93AB9000F3E49 /* CRRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB25D26A93AB9000F3E49 /* CRRoute.swift */; };
@@ -72,6 +70,7 @@
 		F92DB2AC26A93FFD000F3E49 /* TopListRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB2AB26A93FFD000F3E49 /* TopListRequestModel.swift */; };
 		F92DB2AE26A94445000F3E49 /* HomeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB2AD26A94445000F3E49 /* HomeTests.swift */; };
 		F92DB2B026A94452000F3E49 /* NewsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB2AF26A94452000F3E49 /* NewsTests.swift */; };
+		F9D937AD26A94E4700141F35 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D937AC26A94E4700141F35 /* HomeViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -116,8 +115,6 @@
 		F92DB25026A939C7000F3E49 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		F92DB25126A939C7000F3E49 /* HomeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeViewController.xib; sourceTree = "<group>"; };
 		F92DB25426A93A53000F3E49 /* HomeFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeFactory.swift; sourceTree = "<group>"; };
-		F92DB25526A93A53000F3E49 /* HomeInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeInteractor.swift; sourceTree = "<group>"; };
-		F92DB25626A93A54000F3E49 /* HomePresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePresenter.swift; sourceTree = "<group>"; };
 		F92DB25726A93A54000F3E49 /* HomeRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeRouter.swift; sourceTree = "<group>"; };
 		F92DB25C26A93AB9000F3E49 /* AppRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		F92DB25D26A93AB9000F3E49 /* CRRoute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRRoute.swift; sourceTree = "<group>"; };
@@ -157,6 +154,7 @@
 		F92DB2AB26A93FFD000F3E49 /* TopListRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopListRequestModel.swift; sourceTree = "<group>"; };
 		F92DB2AD26A94445000F3E49 /* HomeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTests.swift; sourceTree = "<group>"; };
 		F92DB2AF26A94452000F3E49 /* NewsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTests.swift; sourceTree = "<group>"; };
+		F9D937AC26A94E4700141F35 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		FE3F2EEB239F3127564E185F /* Pods-Crypto.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Crypto.debug.xcconfig"; path = "Target Support Files/Pods-Crypto/Pods-Crypto.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -371,8 +369,7 @@
 			children = (
 				F92DB25426A93A53000F3E49 /* HomeFactory.swift */,
 				F92DB25726A93A54000F3E49 /* HomeRouter.swift */,
-				F92DB25626A93A54000F3E49 /* HomePresenter.swift */,
-				F92DB25526A93A53000F3E49 /* HomeInteractor.swift */,
+				F9D937AC26A94E4700141F35 /* HomeViewModel.swift */,
 				F92DB25026A939C7000F3E49 /* HomeViewController.swift */,
 				F92DB25126A939C7000F3E49 /* HomeViewController.xib */,
 			);
@@ -717,6 +714,7 @@
 				F92DB28E26A93DAE000F3E49 /* NewsRequestModel.swift in Sources */,
 				F92DB23426A938EE000F3E49 /* APIConstant.swift in Sources */,
 				F92DB2A126A93E3E000F3E49 /* LoadingView.swift in Sources */,
+				F9D937AD26A94E4700141F35 /* HomeViewModel.swift in Sources */,
 				F92DB2A526A93E3E000F3E49 /* ToastView.swift in Sources */,
 				F92DB2AC26A93FFD000F3E49 /* TopListRequestModel.swift in Sources */,
 				F92DB26226A93AD1000F3E49 /* NewsViewController.swift in Sources */,
@@ -728,10 +726,8 @@
 				F92DB25826A93A54000F3E49 /* HomeFactory.swift in Sources */,
 				F92DB1FC26A937D1000F3E49 /* AppDelegate.swift in Sources */,
 				F92DB28126A93D42000F3E49 /* NewsManager.swift in Sources */,
-				F92DB25A26A93A54000F3E49 /* HomePresenter.swift in Sources */,
 				F92DB24626A9390B000F3E49 /* Ext+Data.swift in Sources */,
 				F92DB26A26A93B73000F3E49 /* NewsRouter.swift in Sources */,
-				F92DB25926A93A54000F3E49 /* HomeInteractor.swift in Sources */,
 				F92DB2A026A93E3E000F3E49 /* TopListTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

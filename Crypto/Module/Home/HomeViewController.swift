@@ -7,30 +7,28 @@
 
 import UIKit
 
-protocol IHomeViewController: AnyObject {
-    var router: IHomeRouter? { get set }
-    
-    func displayTopList(topListCoins: [TopListModel], coinsCount: Int, subscriptions: [String])
-    func displayTopListError(message: String)
-    func displayLoadMoreTopList(topListCoins: [TopListModel], indexPaths: [IndexPath], subscriptions: [String])
-    func displayLoadMoreTopListError(message: String)
-    func displayRefreshCoins(topListCoins: [TopListModel], at indexPath: IndexPath)
-}
-
 class HomeViewController: UIViewController {
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var homeTableView: UITableView!
     
-    var interactor: IHomeInteractor?
+    let viewModel: HomeViewModel
     var router: IHomeRouter?
     var loadingView: LoadingView!
-    var topListCoins: [TopListModel] = []
     
     lazy var refreshControl: UIRefreshControl = {
         let rc = UIRefreshControl()
         rc.addTarget(self, action: #selector(refreshTopList), for: .valueChanged)
         return rc
     }()
+    
+    init(viewModel: HomeViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +37,7 @@ class HomeViewController: UIViewController {
     }
     
     private func setupComponent() {
-        title = "Cryptocurrencys"
+        title = "Top List"
         homeTableView.refreshControl = refreshControl
         homeTableView.registerCellType(TopListTableViewCell.self)
         
@@ -51,82 +49,75 @@ class HomeViewController: UIViewController {
     @objc private func getTopList() {
         loadingView.start { [weak self] in
             guard let self = self else { return }
-            self.interactor?.getTopList()
+            self.viewModel.getTopList()
         }
     }
     
     @objc private func refreshTopList() {
-        interactor?.getTopList()
+        viewModel.getTopList()
     }
 }
 
-extension HomeViewController: IHomeViewController {
-    func displayTopList(topListCoins: [TopListModel], coinsCount: Int, subscriptions: [String]) {
+extension HomeViewController: HomeViewModelDelegate {
+    func didSuccessGetTopList() {
         if refreshControl.isRefreshing {
             refreshControl.endRefreshing()
         }
-        
-        self.topListCoins = topListCoins
+
         homeTableView.reloadData()
         loadingView.stop()
         
-        interactor?.coinsCount = coinsCount
-        interactor?.currentCoinsCount = topListCoins.count
-        interactor?.subscriptions = subscriptions
-        interactor?.sendSubscription(action: .subscribe)
+        viewModel.sendSubscription(action: .subscribe)
     }
     
-    func displayTopListError(message: String) {
+    func didFailGetTopList(errorMsg: String) {
         if refreshControl.isRefreshing {
             refreshControl.endRefreshing()
-            Toast.share.show(message: message)
+            Toast.share.show(message: errorMsg)
         } else {
-            loadingView.stop(isFailed: true, message: message)
+            loadingView.stop(isFailed: true, message: errorMsg)
         }
     }
     
-    func displayLoadMoreTopList(topListCoins: [TopListModel], indexPaths: [IndexPath], subscriptions: [String]) {
-        guard topListCoins.count > self.topListCoins.count else { return }
-        self.topListCoins = topListCoins
-        interactor?.subscriptions = subscriptions
-        interactor?.sendSubscription(action: .subscribe)
+    func didSuccessLoadMoreTopList() {
         homeTableView.performBatchUpdates({
-            self.homeTableView.insertRows(at: indexPaths, with: .top)
+            self.homeTableView.insertRows(at: viewModel.indexPaths, with: .top)
         }, completion: nil)
+        
+        viewModel.sendSubscription(action: .subscribe)
     }
     
-    func displayLoadMoreTopListError(message: String) {
-        Toast.share.show(message: message)
+    func didFailLoadMoreTopList(errorMsg: String) {
+        Toast.share.show(message: errorMsg)
     }
-    
-    func displayRefreshCoins(topListCoins: [TopListModel], at indexPath: IndexPath) {
-        self.topListCoins = topListCoins
+
+    func refreshCoin(at indexPath: IndexPath) {
         homeTableView.reloadRows(at: [indexPath], with: .fade)
     }
 }
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return topListCoins.count
+        return viewModel.topListCoins.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(TopListTableViewCell.self, for: indexPath)
-        let coin = topListCoins[indexPath.row]
+        let coin = viewModel.topListCoins[indexPath.row]
         cell.setupView(coin: coin)
         return cell
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == topListCoins.count - 1 {
-            if interactor?.couldLoadMore() == true {
-                interactor?.loadMoreTopList()
+        if indexPath.row == viewModel.topListCoins.count - 1 {
+            if viewModel.couldLoadMore() {
+                viewModel.loadMoreTopList()
             }
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let symbol = topListCoins[indexPath.row].symbol
+        let symbol = viewModel.topListCoins[indexPath.row].symbol
         router?.showNews(of: symbol)
     }
 }

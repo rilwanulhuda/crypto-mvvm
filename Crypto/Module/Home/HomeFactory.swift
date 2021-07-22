@@ -8,15 +8,13 @@
 import Foundation
 
 class HomeFactory {
-    static func setup(parameters: [String: Any] = [:]) -> HomeViewController {
-        let controller = HomeViewController()
-        let router = HomeRouter(view: controller)
-        let presenter = HomePresenter(view: controller)
+    static func setup() -> HomeViewController {
         let manager = HomeManager(networkService: NetworkService.share)
-        let interactor = HomeInteractor(presenter: presenter, manager: manager)
+        let viewModel = HomeViewModel(manager: manager)
+        let controller = HomeViewController(viewModel: viewModel)
+        let router = HomeRouter(view: controller)
 
-        interactor.parameters = parameters
-        controller.interactor = interactor
+        viewModel.delegate = controller
         controller.router = router
         return controller
     }
