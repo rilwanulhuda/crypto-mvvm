@@ -36,10 +36,8 @@
 		F92DB25F26A93AB9000F3E49 /* CRRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB25D26A93AB9000F3E49 /* CRRoute.swift */; };
 		F92DB26226A93AD1000F3E49 /* NewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB26026A93AD1000F3E49 /* NewsViewController.swift */; };
 		F92DB26326A93AD1000F3E49 /* NewsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F92DB26126A93AD1000F3E49 /* NewsViewController.xib */; };
-		F92DB26826A93B73000F3E49 /* NewsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB26426A93B73000F3E49 /* NewsPresenter.swift */; };
 		F92DB26926A93B73000F3E49 /* NewsFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB26526A93B73000F3E49 /* NewsFactory.swift */; };
 		F92DB26A26A93B73000F3E49 /* NewsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB26626A93B73000F3E49 /* NewsRouter.swift */; };
-		F92DB26B26A93B73000F3E49 /* NewsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB26726A93B73000F3E49 /* NewsInteractor.swift */; };
 		F92DB27326A93CF6000F3E49 /* TopListPageThreeSuccessResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F92DB26C26A93CF6000F3E49 /* TopListPageThreeSuccessResponse.json */; };
 		F92DB27426A93CF6000F3E49 /* TopListPageTwoSuccessResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F92DB26D26A93CF6000F3E49 /* TopListPageTwoSuccessResponse.json */; };
 		F92DB27526A93CF6000F3E49 /* TopListSuccessResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = F92DB26E26A93CF6000F3E49 /* TopListSuccessResponse.json */; };
@@ -71,6 +69,7 @@
 		F92DB2AE26A94445000F3E49 /* HomeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB2AD26A94445000F3E49 /* HomeTests.swift */; };
 		F92DB2B026A94452000F3E49 /* NewsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB2AF26A94452000F3E49 /* NewsTests.swift */; };
 		F9D937AD26A94E4700141F35 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D937AC26A94E4700141F35 /* HomeViewModel.swift */; };
+		F9D937AF26A9598000141F35 /* NewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D937AE26A9598000141F35 /* NewsViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,10 +119,8 @@
 		F92DB25D26A93AB9000F3E49 /* CRRoute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRRoute.swift; sourceTree = "<group>"; };
 		F92DB26026A93AD1000F3E49 /* NewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewController.swift; sourceTree = "<group>"; };
 		F92DB26126A93AD1000F3E49 /* NewsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsViewController.xib; sourceTree = "<group>"; };
-		F92DB26426A93B73000F3E49 /* NewsPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsPresenter.swift; sourceTree = "<group>"; };
 		F92DB26526A93B73000F3E49 /* NewsFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsFactory.swift; sourceTree = "<group>"; };
 		F92DB26626A93B73000F3E49 /* NewsRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsRouter.swift; sourceTree = "<group>"; };
-		F92DB26726A93B73000F3E49 /* NewsInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsInteractor.swift; sourceTree = "<group>"; };
 		F92DB26C26A93CF6000F3E49 /* TopListPageThreeSuccessResponse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TopListPageThreeSuccessResponse.json; sourceTree = "<group>"; };
 		F92DB26D26A93CF6000F3E49 /* TopListPageTwoSuccessResponse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TopListPageTwoSuccessResponse.json; sourceTree = "<group>"; };
 		F92DB26E26A93CF6000F3E49 /* TopListSuccessResponse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TopListSuccessResponse.json; sourceTree = "<group>"; };
@@ -155,6 +152,7 @@
 		F92DB2AD26A94445000F3E49 /* HomeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTests.swift; sourceTree = "<group>"; };
 		F92DB2AF26A94452000F3E49 /* NewsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTests.swift; sourceTree = "<group>"; };
 		F9D937AC26A94E4700141F35 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		F9D937AE26A9598000141F35 /* NewsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewModel.swift; sourceTree = "<group>"; };
 		FE3F2EEB239F3127564E185F /* Pods-Crypto.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Crypto.debug.xcconfig"; path = "Target Support Files/Pods-Crypto/Pods-Crypto.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -381,8 +379,7 @@
 			children = (
 				F92DB26526A93B73000F3E49 /* NewsFactory.swift */,
 				F92DB26626A93B73000F3E49 /* NewsRouter.swift */,
-				F92DB26426A93B73000F3E49 /* NewsPresenter.swift */,
-				F92DB26726A93B73000F3E49 /* NewsInteractor.swift */,
+				F9D937AE26A9598000141F35 /* NewsViewModel.swift */,
 				F92DB26026A93AD1000F3E49 /* NewsViewController.swift */,
 				F92DB26126A93AD1000F3E49 /* NewsViewController.xib */,
 			);
@@ -707,7 +704,6 @@
 				F92DB29F26A93E3E000F3E49 /* NewsTableViewCell.swift in Sources */,
 				F92DB24126A9390B000F3E49 /* Ext+String.swift in Sources */,
 				F92DB28926A93DAE000F3E49 /* NewsResponseModel.swift in Sources */,
-				F92DB26826A93B73000F3E49 /* NewsPresenter.swift in Sources */,
 				F92DB28026A93D42000F3E49 /* HomeManager.swift in Sources */,
 				F92DB24526A9390B000F3E49 /* Ext+UIView.swift in Sources */,
 				F92DB24026A9390B000F3E49 /* Ext+UITableView.swift in Sources */,
@@ -718,13 +714,13 @@
 				F92DB2A526A93E3E000F3E49 /* ToastView.swift in Sources */,
 				F92DB2AC26A93FFD000F3E49 /* TopListRequestModel.swift in Sources */,
 				F92DB26226A93AD1000F3E49 /* NewsViewController.swift in Sources */,
-				F92DB26B26A93B73000F3E49 /* NewsInteractor.swift in Sources */,
 				F92DB26926A93B73000F3E49 /* NewsFactory.swift in Sources */,
 				F92DB28F26A93DAE000F3E49 /* SubscriptionModel.swift in Sources */,
 				F92DB24326A9390B000F3E49 /* Ext+Dictionary.swift in Sources */,
 				F92DB28B26A93DAE000F3E49 /* TopListResponseModel.swift in Sources */,
 				F92DB25826A93A54000F3E49 /* HomeFactory.swift in Sources */,
 				F92DB1FC26A937D1000F3E49 /* AppDelegate.swift in Sources */,
+				F9D937AF26A9598000141F35 /* NewsViewModel.swift in Sources */,
 				F92DB28126A93D42000F3E49 /* NewsManager.swift in Sources */,
 				F92DB24626A9390B000F3E49 /* Ext+Data.swift in Sources */,
 				F92DB26A26A93B73000F3E49 /* NewsRouter.swift in Sources */,

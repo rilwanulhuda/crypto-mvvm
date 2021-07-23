@@ -9,14 +9,13 @@ import Foundation
 
 class NewsFactory {
     static func setup(parameters: [String: Any] = [:]) -> NewsViewController {
-        let controller = NewsViewController()
-        let router = NewsRouter(view: controller)
-        let presenter = NewsPresenter(view: controller)
         let manager = NewsManager(networkService: NetworkService.share)
-        let interactor = NewsInteractor(presenter: presenter, manager: manager)
+        let viewModel = NewsViewModel(manager: manager)
+        let controller = NewsViewController(viewModel: viewModel)
+        let router = NewsRouter(view: controller)
 
-        interactor.parameters = parameters
-        controller.interactor = interactor
+        viewModel.delegate = controller
+        viewModel.parameters = parameters
         controller.router = router
         return controller
     }
