@@ -19,7 +19,7 @@ protocol HomeViewModelDelegate {
 class HomeViewModel {
     let manager: IHomeManager
     var delegate: HomeViewModelDelegate?
-    var webSocket: WebSocket?
+    var wsService: IWSService?
     var page: Int = 1
     var coinsCount: Int = 0
     var currentCoinsCount: Int = 0
@@ -28,13 +28,15 @@ class HomeViewModel {
     var topListCoins: [TopListModel] = []
     var indexPaths: [IndexPath] = []
 
-    init(manager: IHomeManager) {
+    init(manager: IHomeManager, wsService: IWSService?) {
         self.manager = manager
-        setupWebSocket()
+        self.wsService = wsService
+        self.wsService?.delegate = self
     }
 
     func getTopList() {
         sendSubscription(action: .unsubscribe)
+
         page = 1
         coinsCount = 0
         currentCoinsCount = 0
@@ -99,22 +101,17 @@ class HomeViewModel {
         })
     }
 
-    func setupWebSocket() {
-        var request = URLRequest(url: URL(string: APIConstant.wsUrlString)!)
-        request.timeoutInterval = 5
-        webSocket = WebSocket(request: request)
-        webSocket?.delegate = self
-        webSocket?.connect()
-    }
-
     func sendSubscription(action: SubActionType) {
-        guard !subscriptions.isEmpty, isWsConnected else { return }
-        let model = SubscriptionModel(action: action, subscription: subscriptions)
-        let json = model.parameters()?.toJSON
-        webSocket?.write(string: json!)
+        wsService?.sendSubscription(action: action, subscriptions: subscriptions)
+    }
+}
+
+extension HomeViewModel: WSServiceDelegate {
+    func didUpdateConnectionStatus(isConnected: Bool) {
+        sendSubscription(action: .subscribe)
     }
 
-    func handleTickerResponse(response: TickerResponseModel) {
+    func didReceiveTickerResponse(response: TickerResponseModel) {
         for i in 0 ..< topListCoins.count {
             let coin = topListCoins[i]
             if coin.symbol == response.symbol {
@@ -130,54 +127,6 @@ class HomeViewModel {
                 print("\(String(describing: coin.openPrice))\n\(response)\n\(updatedCoin)\n")
                 break
             }
-        }
-    }
-}
-
-extension HomeViewModel: WebSocketDelegate {
-    func didReceive(event: WebSocketEvent, client: WebSocket) {
-        switch event {
-        case .connected(let headers):
-            isWsConnected = true
-            sendSubscription(action: .subscribe)
-            print("websocket is connected: \(headers)")
-        case .disconnected(let reason, let code):
-            isWsConnected = false
-            print("websocket is disconnected: \(reason) with code: \(code)")
-
-        case .text(let string):
-            guard let dict = string.toDictionary(),
-                  let type = dict["TYPE"] as? String, type == "2",
-                  let flags = dict["FLAGS"] as? Int, flags == 2 else { return }
-
-            if let symbol = dict["FROMSYMBOL"] as? String, let price = dict["PRICE"] as? Double {
-                let tickerResponse = TickerResponseModel(symbol: symbol, price: price)
-                handleTickerResponse(response: tickerResponse)
-            }
-
-        case .binary(let data):
-            print("Receive data: \(data.count)")
-
-        case .pong:
-            print("pong")
-
-        case .ping:
-            print("ping")
-
-        case .error(let error):
-            isWsConnected = false
-            print(error?.localizedDescription ?? Messages.generalError)
-
-        case .viabilityChanged:
-            print("viabilityChanged")
-
-        case .reconnectSuggested:
-            isWsConnected = false
-            print("reconnectedSuggested")
-
-        case .cancelled:
-            isWsConnected = false
-            print("connection cancelled")
         }
     }
 }

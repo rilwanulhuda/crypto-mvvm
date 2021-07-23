@@ -10,7 +10,8 @@ import Foundation
 class HomeFactory {
     static func setup() -> HomeViewController {
         let manager = HomeManager(networkService: NetworkService.share)
-        let viewModel = HomeViewModel(manager: manager)
+        let wsService = WSService.share
+        let viewModel = HomeViewModel(manager: manager, wsService: wsService)
         let controller = HomeViewController(viewModel: viewModel)
         let router = HomeRouter(view: controller)
 

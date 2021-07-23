@@ -68,6 +68,7 @@
 		F92DB2AC26A93FFD000F3E49 /* TopListRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB2AB26A93FFD000F3E49 /* TopListRequestModel.swift */; };
 		F92DB2AE26A94445000F3E49 /* HomeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB2AD26A94445000F3E49 /* HomeTests.swift */; };
 		F92DB2B026A94452000F3E49 /* NewsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB2AF26A94452000F3E49 /* NewsTests.swift */; };
+		F9C85DD826AA70A5005CF4A3 /* WSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C85DD726AA70A5005CF4A3 /* WSService.swift */; };
 		F9D937AD26A94E4700141F35 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D937AC26A94E4700141F35 /* HomeViewModel.swift */; };
 		F9D937AF26A9598000141F35 /* NewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D937AE26A9598000141F35 /* NewsViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -151,6 +152,7 @@
 		F92DB2AB26A93FFD000F3E49 /* TopListRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopListRequestModel.swift; sourceTree = "<group>"; };
 		F92DB2AD26A94445000F3E49 /* HomeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTests.swift; sourceTree = "<group>"; };
 		F92DB2AF26A94452000F3E49 /* NewsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTests.swift; sourceTree = "<group>"; };
+		F9C85DD726AA70A5005CF4A3 /* WSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSService.swift; sourceTree = "<group>"; };
 		F9D937AC26A94E4700141F35 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		F9D937AE26A9598000141F35 /* NewsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewModel.swift; sourceTree = "<group>"; };
 		FE3F2EEB239F3127564E185F /* Pods-Crypto.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Crypto.debug.xcconfig"; path = "Target Support Files/Pods-Crypto/Pods-Crypto.debug.xcconfig"; sourceTree = "<group>"; };
@@ -305,6 +307,7 @@
 			children = (
 				F92DB27A26A93D17000F3E49 /* NetworkService.swift */,
 				F92DB27B26A93D17000F3E49 /* Endpoint.swift */,
+				F9C85DD726AA70A5005CF4A3 /* WSService.swift */,
 			);
 			path = NetworkService;
 			sourceTree = "<group>";
@@ -701,6 +704,7 @@
 				F92DB23226A938EE000F3E49 /* Messages.swift in Sources */,
 				F92DB25E26A93AB9000F3E49 /* AppRouter.swift in Sources */,
 				F92DB24426A9390B000F3E49 /* Ext+UIViewController.swift in Sources */,
+				F9C85DD826AA70A5005CF4A3 /* WSService.swift in Sources */,
 				F92DB29F26A93E3E000F3E49 /* NewsTableViewCell.swift in Sources */,
 				F92DB24126A9390B000F3E49 /* Ext+String.swift in Sources */,
 				F92DB28926A93DAE000F3E49 /* NewsResponseModel.swift in Sources */,

@@ -12,6 +12,7 @@ import XCTest
 
 class HomeTests: CryptoTests {
     var homeManagerMock: HomeManagerMock!
+    var wsServiceMock: WSServiceMock!
     var sut: HomeViewModel!
     var expectedErrorMsg: String!
     var expectedIndexPath: IndexPath!
@@ -21,7 +22,8 @@ class HomeTests: CryptoTests {
     override func setUp() {
         super.setUp()
         homeManagerMock = mock(HomeManager.self).initialize(networkService: networkServiceMock)
-        sut = HomeViewModel(manager: homeManagerMock)
+        wsServiceMock = mock(WSService.self).initialize()
+        sut = HomeViewModel(manager: homeManagerMock, wsService: wsServiceMock)
         sut.delegate = self
     }
     
@@ -247,7 +249,7 @@ class HomeTests: CryptoTests {
         let symbol = "TRX"
         let updatedPrice = 0.07798
         let tickerResponse = TickerResponseModel(symbol: symbol, price: updatedPrice)
-        sut.handleTickerResponse(response: tickerResponse)
+        sut.didReceiveTickerResponse(response: tickerResponse)
         
         for coin in sut.topListCoins {
             if coin.symbol == symbol {
@@ -269,6 +271,14 @@ class HomeTests: CryptoTests {
         sut.coinsCount = 40
         
         XCTAssertEqual(sut.couldLoadMore(), false)
+    }
+    
+    func testDidUpdateConnectionStatus() {
+        _ = given(wsServiceMock.sendSubscription(action: any(), subscriptions: any()))
+        
+        sut.didUpdateConnectionStatus(isConnected: true)
+        
+        verify(wsServiceMock.sendSubscription(action: any(), subscriptions: any())).wasCalled()
     }
 }
 
