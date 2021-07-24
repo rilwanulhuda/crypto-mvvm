@@ -1,7 +1,7 @@
 # About
 
 This is a sample project.<br/>
-I created a simple app using Clean Swift (VIP) architecture.<br/>
+I created a simple app using MVVM architecture.<br/>
 I use Alamofire to handle api call and Starscream to handle websocket connection.
 <br/><br/>
 Author: Rilwanul Huda<br/>
