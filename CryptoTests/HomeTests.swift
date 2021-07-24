@@ -12,19 +12,27 @@ import XCTest
 
 class HomeTests: CryptoTests {
     var homeManagerMock: HomeManagerMock!
-    var interactor: HomeInteractor!
-    var sut: HomePresenter!
+    var wsServiceMock: WSServiceMock!
+    var sut: HomeViewModel!
+    var expectedErrorMsg: String!
+    var expectedIndexPath: IndexPath!
+    var successGetTopList: Bool!
+    var successLoadMoreTopList: Bool!
     
     override func setUp() {
         super.setUp()
         homeManagerMock = mock(HomeManager.self).initialize(networkService: networkServiceMock)
-        sut = HomePresenter(view: nil)
-        interactor = HomeInteractor(presenter: sut, manager: homeManagerMock)
+        wsServiceMock = mock(WSService.self).initialize()
+        sut = HomeViewModel(manager: homeManagerMock, wsService: wsServiceMock)
+        sut.delegate = self
     }
     
     override func tearDown() {
+        successLoadMoreTopList = nil
+        successGetTopList = nil
+        expectedErrorMsg = nil
+        expectedIndexPath = nil
         homeManagerMock = nil
-        interactor = nil
         sut = nil
         super.tearDown()
     }
@@ -37,7 +45,7 @@ class HomeTests: CryptoTests {
             result(.success(mockSuccessResponse!))
         }
         
-        interactor.getTopList()
+        sut.getTopList()
         
         verify(homeManagerMock.getTopList(model: any(), completion: any())).wasCalled()
         
@@ -75,6 +83,8 @@ class HomeTests: CryptoTests {
                 XCTAssertNil(sutCoin.openPrice)
             }
         }
+        
+        XCTAssertEqual(successGetTopList, true)
     }
     
     func testGetTopListSuccessResponseNoData() {
@@ -85,28 +95,28 @@ class HomeTests: CryptoTests {
             result(.success(mockSuccessResponse!))
         }
         
-        interactor.getTopList()
+        sut.getTopList()
         
         verify(homeManagerMock.getTopList(model: any(), completion: any())).wasCalled()
         
         XCTAssertEqual(sut.topListCoins.count, mockSuccessResponse?.data?.count)
         XCTAssertTrue(sut.topListCoins.isEmpty)
-        XCTAssertEqual(sut.errorMsg, Messages.noCoinsFound)
+        XCTAssertEqual(expectedErrorMsg, Messages.noCoinsFound)
     }
     
     func testGetTopListFailed() {
-        let expectedErrorMsg = Messages.generalError
+        let errorMsg = Messages.generalError
         
         given(homeManagerMock.getTopList(model: any(), completion: any())) ~> {
             _, result in
-            result(.failure(expectedErrorMsg))
+            result(.failure(errorMsg))
         }
         
-        interactor.getTopList()
+        sut.getTopList()
         
         verify(homeManagerMock.getTopList(model: any(), completion: any())).wasCalled()
         
-        XCTAssertEqual(sut.errorMsg, expectedErrorMsg)
+        XCTAssertEqual(expectedErrorMsg, errorMsg)
         XCTAssertTrue(sut.topListCoins.isEmpty)
     }
     
@@ -122,7 +132,7 @@ class HomeTests: CryptoTests {
             result(.success(mockSuccessResponse!))
         }
         
-        interactor.getTopList()
+        sut.getTopList()
         expectedAllCoins += mockSuccessResponse!.data!
         
         verify(homeManagerMock.getTopList(model: any(), completion: any())).wasCalled()
@@ -136,10 +146,10 @@ class HomeTests: CryptoTests {
             result(.success(mockPageTwoSuccessResponse!))
         }
         
-        interactor.loadMoreTopList()
+        sut.loadMoreTopList()
         expectedAllCoins += mockPageTwoSuccessResponse!.data!
         
-        XCTAssertEqual(interactor.page, 2)
+        XCTAssertEqual(sut.page, 2)
         XCTAssertEqual(sut.topListCoins.count, expectedAllCoins.count)
         XCTAssertFalse(sut.topListCoins.isEmpty)
         
@@ -149,10 +159,10 @@ class HomeTests: CryptoTests {
             result(.success(mockPageThreeSuccessResponse!))
         }
         
-        interactor.loadMoreTopList()
+        sut.loadMoreTopList()
         expectedAllCoins += mockPageThreeSuccessResponse!.data!
         
-        XCTAssertEqual(interactor.page, 3)
+        XCTAssertEqual(sut.page, 3)
         XCTAssertEqual(sut.topListCoins.count, expectedAllCoins.count)
         XCTAssertFalse(sut.topListCoins.isEmpty)
         
@@ -183,10 +193,12 @@ class HomeTests: CryptoTests {
                 XCTAssertEqual(sutCoin.changes, "n/a")
             }
         }
+        
+        XCTAssertEqual(successLoadMoreTopList, true)
     }
     
     func testLoadMoreTopListFailed() {
-        let expectedErrorMsg = Messages.generalError
+        let errorMsg = Messages.generalError
         let mockSuccessResponse = mockResponse(of: TopListResponseModel.self, filename: .topListSuccessResponse)
         
         // Initial load page 1
@@ -195,7 +207,7 @@ class HomeTests: CryptoTests {
             result(.success(mockSuccessResponse!))
         }
         
-        interactor.getTopList()
+        sut.getTopList()
         
         verify(homeManagerMock.getTopList(model: any(), completion: any())).wasCalled()
         
@@ -207,15 +219,15 @@ class HomeTests: CryptoTests {
         
         given(homeManagerMock.getTopList(model: any(), completion: any())) ~> {
             _, result in
-            result(.failure(expectedErrorMsg))
+            result(.failure(errorMsg))
         }
         
-        interactor.loadMoreTopList()
+        sut.loadMoreTopList()
         
         verify(homeManagerMock.getTopList(model: any(), completion: any())).wasCalled(2)
         
-        XCTAssertEqual(interactor.page, 2)
-        XCTAssertEqual(sut.errorMsg, expectedErrorMsg)
+        XCTAssertEqual(sut.page, 2)
+        XCTAssertEqual(expectedErrorMsg, errorMsg)
         XCTAssertEqual(sut.topListCoins.count, currentTopListCount)
     }
     
@@ -227,7 +239,7 @@ class HomeTests: CryptoTests {
             result(.success(mockSuccessResponse!))
         }
         
-        interactor.getTopList()
+        sut.getTopList()
         
         verify(homeManagerMock.getTopList(model: any(), completion: any())).wasCalled()
         
@@ -237,7 +249,7 @@ class HomeTests: CryptoTests {
         let symbol = "TRX"
         let updatedPrice = 0.07798
         let tickerResponse = TickerResponseModel(symbol: symbol, price: updatedPrice)
-        interactor.presenter?.presentTickerResponse(response: tickerResponse)
+        sut.didReceiveTickerResponse(response: tickerResponse)
         
         for coin in sut.topListCoins {
             if coin.symbol == symbol {
@@ -245,5 +257,49 @@ class HomeTests: CryptoTests {
                 return
             }
         }
+    }
+    
+    func testCouldLoadMore() {
+        // test could load more true
+        sut.currentCoinsCount = 20
+        sut.coinsCount = 40
+        
+        XCTAssertEqual(sut.couldLoadMore(), true)
+        
+        // test could load more false
+        sut.currentCoinsCount = 40
+        sut.coinsCount = 40
+        
+        XCTAssertEqual(sut.couldLoadMore(), false)
+    }
+    
+    func testDidUpdateConnectionStatus() {
+        _ = given(wsServiceMock.sendSubscription(action: any(), subscriptions: any()))
+        
+        sut.didUpdateConnectionStatus(isConnected: true)
+        
+        verify(wsServiceMock.sendSubscription(action: any(), subscriptions: any())).wasCalled()
+    }
+}
+
+extension HomeTests: HomeViewModelDelegate {
+    func didSuccessGetTopList() {
+        successGetTopList = true
+    }
+    
+    func didFailGetTopList(errorMsg: String) {
+        expectedErrorMsg = errorMsg
+    }
+    
+    func didSuccessLoadMoreTopList() {
+        successLoadMoreTopList = true
+    }
+    
+    func didFailLoadMoreTopList(errorMsg: String) {
+        expectedErrorMsg = errorMsg
+    }
+    
+    func refreshCoin(at indexPath: IndexPath) {
+        expectedIndexPath = indexPath
     }
 }

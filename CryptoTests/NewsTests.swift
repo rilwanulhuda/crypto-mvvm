@@ -12,19 +12,19 @@ import XCTest
 
 class NewsTests: CryptoTests {
     var newsManagerMock: NewsManagerMock!
-    var interactor: NewsInteractor!
-    var sut: NewsPresenter!
+    var sut: NewsViewModel!
+    var successGetNews: Bool!
+    var expectedErrorMsg: String!
     
     override func setUp() {
         super.setUp()
         newsManagerMock = mock(NewsManager.self).initialize(networkService: networkServiceMock)
-        sut = NewsPresenter(view: nil)
-        interactor = NewsInteractor(presenter: sut, manager: newsManagerMock)
+        sut = NewsViewModel(manager: newsManagerMock)
+        sut.delegate = self
     }
     
     override func tearDown() {
         newsManagerMock = nil
-        interactor = nil
         sut = nil
         super.tearDown()
     }
@@ -37,14 +37,14 @@ class NewsTests: CryptoTests {
             result(.success(mockSuccessResponse!))
         }
         
-        interactor.getNews()
+        sut.getNews()
         
         verify(newsManagerMock.getNews(model: any(), completion: any())).wasCalled()
         
         XCTAssertEqual(sut.news.count, mockSuccessResponse?.data?.count)
         XCTAssertFalse(sut.news.isEmpty)
         
-        for i in 0..<sut.news.count {
+        for i in 0 ..< sut.news.count {
             let sutNews = sut.news[i]
             let expectedNews = mockSuccessResponse!.data![i]
             
@@ -66,9 +66,12 @@ class NewsTests: CryptoTests {
                 XCTAssertEqual(sutNews.source, "n/a")
             }
         }
+        
+        XCTAssertEqual(successGetNews, true)
     }
     
     func testGetNewsSuccessResponseNoData() {
+        let errorMsg = Messages.noNewsFound
         let mockSuccessResponse = mockResponse(of: NewsResponseModel.self, filename: .newsSuccessResponseNoData)
         
         given(newsManagerMock.getNews(model: any(), completion: any())) ~> {
@@ -76,28 +79,38 @@ class NewsTests: CryptoTests {
             result(.success(mockSuccessResponse!))
         }
         
-        interactor.getNews()
+        sut.getNews()
         
         verify(newsManagerMock.getNews(model: any(), completion: any())).wasCalled()
         
         XCTAssertEqual(sut.news.count, mockSuccessResponse?.data?.count)
         XCTAssertTrue(sut.news.isEmpty)
-        XCTAssertEqual(sut.errorMsg, Messages.noNewsFound)
+        XCTAssertEqual(expectedErrorMsg, errorMsg)
     }
     
     func testGetNewsFailed() {
-        let expectedErrorMsg = Messages.generalError
+        let errorMsg = Messages.generalError
         
         given(newsManagerMock.getNews(model: any(), completion: any())) ~> {
             _, result in
-            result(.failure(expectedErrorMsg))
+            result(.failure(errorMsg))
         }
         
-        interactor.getNews()
+        sut.getNews()
         
         verify(newsManagerMock.getNews(model: any(), completion: any())).wasCalled()
         
         XCTAssertTrue(sut.news.isEmpty)
-        XCTAssertEqual(sut.errorMsg, expectedErrorMsg)
+        XCTAssertEqual(expectedErrorMsg, errorMsg)
+    }
+}
+
+extension NewsTests: NewsViewModelDelegate {
+    func didSuccessGetNews() {
+        successGetNews = true
+    }
+    
+    func didFailGetNews(errorMsg: String) {
+        expectedErrorMsg = errorMsg
     }
 }

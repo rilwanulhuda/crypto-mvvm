@@ -14,27 +14,28 @@
 
 import UIKit
 
-protocol INewsViewController {
-    var router: INewsRouter? { get set }
-    
-    func displayNews(news: [NewsModel])
-    func displayNewsError(message: String)
-}
-
 class NewsViewController: UIViewController {
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var newsTableView: UITableView!
     
-    var interactor: INewsInteractor?
+    var viewModel: NewsViewModel
     var router: INewsRouter?
     var loadingView: LoadingView!
-    var news: [NewsModel] = []
     
     lazy var refreshControl: UIRefreshControl = {
         let rc = UIRefreshControl()
         rc.addTarget(self, action: #selector(refreshNews), for: .valueChanged)
         return rc
     }()
+    
+    init(viewModel: NewsViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,24 +48,23 @@ class NewsViewController: UIViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Dismiss", style: .plain, target: self, action: #selector(dismissView))
         newsTableView.registerCellType(NewsTableViewCell.self)
         
-        let symbol = interactor?.parameters?["symbol"] as? String
+        let symbol = viewModel.symbol
         title = symbol != nil ? "\(symbol!) News" : "Crypto News"
         
         loadingView = LoadingView()
         loadingView.setup(in: contentView)
         loadingView.reloadButton.touchUpInside(self, action: #selector(getNews))
-        
     }
     
     @objc private func getNews() {
         loadingView.start { [weak self] in
             guard let self = self else { return }
-            self.interactor?.getNews()
+            self.viewModel.getNews()
         }
     }
     
     @objc func refreshNews() {
-        interactor?.getNews()
+        viewModel.getNews()
     }
     
     @objc func dismissView() {
@@ -72,18 +72,17 @@ class NewsViewController: UIViewController {
     }
 }
     
-extension NewsViewController: INewsViewController {
-    func displayNews(news: [NewsModel]) {
+extension NewsViewController: NewsViewModelDelegate {
+    func didSuccessGetNews() {
         if refreshControl.isRefreshing {
             refreshControl.endRefreshing()
         }
         
-        self.news = news
         newsTableView.reloadData()
         loadingView.stop()
     }
     
-    func displayNewsError(message: String) {
+    func didFailGetNews(errorMsg message: String) {
         if refreshControl.isRefreshing {
             Toast.share.show(message: message) { [weak self] in
                 guard let self = self else { return }
@@ -97,12 +96,12 @@ extension NewsViewController: INewsViewController {
 
 extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return news.count
+        return viewModel.news.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(NewsTableViewCell.self, for: indexPath)
-        let news = self.news[indexPath.row]
+        let news = viewModel.news[indexPath.row]
         cell.setupView(news: news)
         
         cell.handleUpdateCell = {
@@ -114,8 +113,7 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let news = self.news[indexPath.row]
+        let news = viewModel.news[indexPath.row]
         print(news)
     }
 }
-
