@@ -20,6 +20,7 @@ class NewsTableViewCell: UITableViewCell {
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(didTapBodyLabel))
         bodyLabel.addGestureRecognizer(tap)
+        bodyLabel.isUserInteractionEnabled = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
